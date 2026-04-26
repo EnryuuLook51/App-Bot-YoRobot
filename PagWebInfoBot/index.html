@@ -1,0 +1,601 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YoRobot — Bot de Discord para Equipos de Desarrollo</title>
+    <meta name="description" content="YoRobot es tu asistente integral de Discord: IA inteligente, gestión de tareas, música con mixes, standups automáticos y más para tu equipo de desarrollo.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-container">
+            <a href="#hero" class="nav-logo">
+                <span class="logo-icon">🤖</span>
+                <span class="logo-text">YoRobot</span>
+                <span class="logo-badge">v2.0</span>
+            </a>
+            <ul class="nav-links" id="navLinks">
+                <li><a href="#features" class="nav-link">Funciones</a></li>
+                <li><a href="#ia" class="nav-link">IA</a></li>
+                <li><a href="#musica" class="nav-link">Música</a></li>
+                <li><a href="#gestion" class="nav-link">Gestión</a></li>
+                <li><a href="#comandos" class="nav-link">Comandos</a></li>
+                <li><a href="#equipo" class="nav-link">Equipo</a></li>
+            </ul>
+            <button class="nav-toggle" id="navToggle" aria-label="Menú">
+                <span></span><span></span><span></span>
+            </button>
+        </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" id="hero">
+        <div class="hero-bg">
+            <div class="hero-orb hero-orb-1"></div>
+            <div class="hero-orb hero-orb-2"></div>
+            <div class="hero-orb hero-orb-3"></div>
+        </div>
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="pulse-dot"></span>
+                Bot de Discord para equipos de desarrollo
+            </div>
+            <h1 class="hero-title">
+                Tu equipo.<br>
+                <span class="gradient-text">Un solo bot.</span><br>
+                Productividad infinita.
+            </h1>
+            <p class="hero-subtitle">
+                YoRobot es el asistente integral que combina <strong>Inteligencia Artificial</strong>, 
+                <strong>gestión de proyectos</strong>, <strong>música inteligente</strong> y 
+                <strong>automatización</strong> — todo dentro de Discord.
+            </p>
+            <div class="hero-actions">
+                <a href="#features" class="btn btn-primary">
+                    <span>Explorar funciones</span>
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M7 17l9.2-9.2M17 17V8H8"/></svg>
+                </a>
+                <a href="#comandos" class="btn btn-ghost">
+                    <span>Ver comandos</span>
+                </a>
+            </div>
+            <div class="hero-stats">
+                <div class="stat">
+                    <span class="stat-number" data-count="30">0</span><span class="stat-plus">+</span>
+                    <span class="stat-label">Comandos</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number" data-count="9">0</span>
+                    <span class="stat-label">Módulos</span>
+                </div>
+                <div class="stat-divider"></div>
+                <div class="stat">
+                    <span class="stat-number" data-count="24">0</span><span class="stat-plus">/7</span>
+                    <span class="stat-label">Disponible</span>
+                </div>
+            </div>
+        </div>
+        <div class="hero-visual">
+            <div class="terminal-window">
+                <div class="terminal-header">
+                    <div class="terminal-dots">
+                        <span class="dot red"></span>
+                        <span class="dot yellow"></span>
+                        <span class="dot green"></span>
+                    </div>
+                    <span class="terminal-title">YoRobot — Discord</span>
+                </div>
+                <div class="terminal-body" id="terminalBody">
+                    <div class="terminal-line"><span class="t-time">09:00</span> <span class="t-bot">YoRobot</span> <span class="t-msg">🌅 ¡Buenos días, equipo! Hora del standup.</span></div>
+                    <div class="terminal-line"><span class="t-time">09:05</span> <span class="t-user">Carlos</span> <span class="t-msg">/standup</span></div>
+                    <div class="terminal-line"><span class="t-time">09:05</span> <span class="t-bot">YoRobot</span> <span class="t-msg">✅ Standup registrado correctamente</span></div>
+                    <div class="terminal-line"><span class="t-time">10:30</span> <span class="t-user">Ana</span> <span class="t-msg">/iaver ¿Qué error tiene este diseño?</span></div>
+                    <div class="terminal-line"><span class="t-time">10:30</span> <span class="t-bot">YoRobot</span> <span class="t-msg">🤖 Analizando imagen...</span></div>
+                    <div class="terminal-line"><span class="t-time">11:00</span> <span class="t-user">Luis</span> <span class="t-msg">/mix ia lofi para programar concentrado</span></div>
+                    <div class="terminal-line"><span class="t-time">11:00</span> <span class="t-bot">YoRobot</span> <span class="t-msg">🎵 Mix generado: 10 canciones ▶️💾🔄</span></div>
+                    <div class="terminal-line"><span class="t-time">14:00</span> <span class="t-user">Carlos</span> <span class="t-msg">/tarea Diseñar login @Ana alta</span></div>
+                    <div class="terminal-line"><span class="t-time">14:00</span> <span class="t-bot">YoRobot</span> <span class="t-msg">📋 Tarea #42 creada y asignada</span></div>
+                    <div class="terminal-line"><span class="t-time">18:00</span> <span class="t-bot">YoRobot</span> <span class="t-msg">📊 Reporte semanal: 12 tareas ✅ | MVP: @Carlos 🏆</span></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FEATURES OVERVIEW -->
+    <section class="features" id="features">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Funciones</span>
+                <h2 class="section-title">Todo lo que tu equipo necesita,<br><span class="gradient-text">en un solo lugar</span></h2>
+                <p class="section-subtitle">9 módulos diseñados para maximizar la productividad de equipos de desarrollo de software.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card feature-ai" data-aos="fade-up">
+                    <div class="feature-icon">🤖</div>
+                    <h3>Inteligencia Artificial</h3>
+                    <p>Chat, análisis de imágenes, lectura de código, code review y generación de documentación — todo con Qwen AI.</p>
+                    <span class="feature-count">7 comandos</span>
+                </div>
+                <div class="feature-card feature-music" data-aos="fade-up" data-delay="100">
+                    <div class="feature-icon">🎵</div>
+                    <h3>Música Inteligente</h3>
+                    <p>Reproduce, crea mixes personalizados y deja que la IA genere playlists perfectas para programar.</p>
+                    <span class="feature-count">13 comandos</span>
+                </div>
+                <div class="feature-card feature-roles" data-aos="fade-up" data-delay="200">
+                    <div class="feature-icon">🏢</div>
+                    <h3>Roles del Equipo</h3>
+                    <p>Auto-asignación interactiva de roles: Frontend, Backend, Mobile, PM, QA, UI/UX y más.</p>
+                    <span class="feature-count">4 comandos</span>
+                </div>
+                <div class="feature-card feature-tasks" data-aos="fade-up" data-delay="300">
+                    <div class="feature-icon">📋</div>
+                    <h3>Tareas & Tickets</h3>
+                    <p>Crea, asigna, filtra y mueve tareas por un tablero Kanban — sin salir de Discord.</p>
+                    <span class="feature-count">5 comandos</span>
+                </div>
+                <div class="feature-card feature-standup" data-aos="fade-up" data-delay="400">
+                    <div class="feature-icon">🌅</div>
+                    <h3>Standups Diarios</h3>
+                    <p>Formulario modal cada mañana. Recordatorio automático a las 9 AM y resumen semanal.</p>
+                    <span class="feature-count">3 comandos</span>
+                </div>
+                <div class="feature-card feature-remind" data-aos="fade-up" data-delay="500">
+                    <div class="feature-icon">⏰</div>
+                    <h3>Recordatorios</h3>
+                    <p>Recordatorios personales y deadlines de proyecto con notificaciones automáticas.</p>
+                    <span class="feature-count">3 comandos</span>
+                </div>
+                <div class="feature-card feature-report" data-aos="fade-up" data-delay="600">
+                    <div class="feature-icon">📊</div>
+                    <h3>Reportes Semanales</h3>
+                    <p>Métricas cada viernes: tareas completadas, MVP de la semana y próximos deadlines.</p>
+                    <span class="feature-count">Automático</span>
+                </div>
+                <div class="feature-card feature-monitor" data-aos="fade-up" data-delay="700">
+                    <div class="feature-icon">📶</div>
+                    <h3>Monitoreo</h3>
+                    <p>Status en tiempo real: latencia, CPU, RAM, uptime y módulos activos del bot.</p>
+                    <span class="feature-count">1 comando</span>
+                </div>
+                <div class="feature-card feature-welcome" data-aos="fade-up" data-delay="800">
+                    <div class="feature-icon">👋</div>
+                    <h3>Bienvenida</h3>
+                    <p>Onboarding automático con embed de bienvenida y DM con instrucciones para nuevos miembros.</p>
+                    <span class="feature-count">Automático</span>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- IA SECTION -->
+    <section class="detail-section" id="ia">
+        <div class="container">
+            <div class="detail-grid">
+                <div class="detail-content">
+                    <span class="section-tag tag-ai">Inteligencia Artificial</span>
+                    <h2 class="section-title">Un asistente IA que <span class="gradient-text">entiende tu código</span></h2>
+                    <p class="section-subtitle">Powered by Qwen AI. Analiza imágenes, lee archivos de código, hace code review profesional y genera documentación — todo bajo demanda para no agotar la API.</p>
+                    
+                    <div class="detail-features">
+                        <div class="detail-feature">
+                            <div class="df-icon">💬</div>
+                            <div>
+                                <h4>Chat contextualizado</h4>
+                                <p>System prompt configurado para tu empresa. Conoce tu stack tecnológico.</p>
+                            </div>
+                        </div>
+                        <div class="detail-feature">
+                            <div class="df-icon">🖼️</div>
+                            <div>
+                                <h4>Visión de imágenes</h4>
+                                <p>Adjunta un screenshot y la IA detecta errores, analiza diseños o describe lo que ve. <strong>Solo cuando tú lo pidas</strong>, con 10 análisis/día.</p>
+                            </div>
+                        </div>
+                        <div class="detail-feature">
+                            <div class="df-icon">📄</div>
+                            <div>
+                                <h4>Lectura de código</h4>
+                                <p>Sube archivos .py, .js, .ts y más. La IA hace code review automático con puntuación del 1 al 10.</p>
+                            </div>
+                        </div>
+                        <div class="detail-feature">
+                            <div class="df-icon">🧵</div>
+                            <div>
+                                <h4>Hilos con contexto</h4>
+                                <p>Abre un thread donde la IA recuerda los últimos 10 mensajes de la conversación.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-visual">
+                    <div class="code-block">
+                        <div class="code-header">
+                            <span class="code-dot red"></span>
+                            <span class="code-dot yellow"></span>
+                            <span class="code-dot green"></span>
+                            <span class="code-lang">/iareview</span>
+                        </div>
+                        <pre class="code-content"><code><span class="c-comment">## 📋 Resumen</span>
+<span class="c-string">Función con potencial bug en el cálculo.</span>
+
+<span class="c-comment">## 🐛 Problemas encontrados</span>
+<span class="c-keyword">1.</span> División por cero sin validación
+<span class="c-keyword">2.</span> Variable no inicializada en el else
+
+<span class="c-comment">## 💡 Sugerencias</span>
+<span class="c-keyword">1.</span> Agregar guard clause <span class="c-function">if n == 0</span>
+<span class="c-keyword">2.</span> Usar <span class="c-function">Optional[int]</span> para el tipo
+
+<span class="c-comment">## ⭐ Puntuación: 6/10</span>
+<span class="c-string">Funcional pero con edge cases sin cubrir.</span></code></pre>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MÚSICA SECTION -->
+    <section class="detail-section section-dark" id="musica">
+        <div class="container">
+            <div class="detail-grid reverse">
+                <div class="detail-visual">
+                    <div class="music-player">
+                        <div class="player-art">
+                            <div class="vinyl-record">
+                                <div class="vinyl-label">🎵</div>
+                            </div>
+                        </div>
+                        <div class="player-info">
+                            <h4 class="player-title">Coding Night Mix</h4>
+                            <p class="player-artist">Generado por IA</p>
+                        </div>
+                        <div class="player-progress">
+                            <div class="progress-bar">
+                                <div class="progress-fill"></div>
+                            </div>
+                            <div class="progress-time">
+                                <span>2:34</span>
+                                <span>4:12</span>
+                            </div>
+                        </div>
+                        <div class="player-controls">
+                            <button class="p-btn">⏮</button>
+                            <button class="p-btn p-btn-play">▶</button>
+                            <button class="p-btn">⏭</button>
+                        </div>
+                        <div class="player-queue">
+                            <div class="queue-item active">
+                                <span class="qi-num">▶</span>
+                                <span class="qi-title">Nujabes — Feather</span>
+                            </div>
+                            <div class="queue-item">
+                                <span class="qi-num">2</span>
+                                <span class="qi-title">Tame Impala — Let It Happen</span>
+                            </div>
+                            <div class="queue-item">
+                                <span class="qi-num">3</span>
+                                <span class="qi-title">Khruangbin — Time</span>
+                            </div>
+                            <div class="queue-item">
+                                <span class="qi-num">4</span>
+                                <span class="qi-title">Daft Punk — Something About Us</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="detail-content">
+                    <span class="section-tag tag-music">Música</span>
+                    <h2 class="section-title">Mixes generados por <span class="gradient-text">Inteligencia Artificial</span></h2>
+                    <p class="section-subtitle">No solo reproduce música — crea experiencias. Describe el mood y la IA genera playlists perfectas con canciones reales de YouTube.</p>
+                    
+                    <div class="detail-features">
+                        <div class="detail-feature">
+                            <div class="df-icon">🎧</div>
+                            <div>
+                                <h4>Cola inteligente</h4>
+                                <p>Play, skip, pause, resume. Cola con auto-reproducción de la siguiente canción.</p>
+                            </div>
+                        </div>
+                        <div class="detail-feature">
+                            <div class="df-icon">💾</div>
+                            <div>
+                                <h4>Mixes personalizados</h4>
+                                <p>Crea hasta 10 playlists con 30 canciones cada una. Compártelas con el equipo.</p>
+                            </div>
+                        </div>
+                        <div class="detail-feature">
+                            <div class="df-icon">🤖</div>
+                            <div>
+                                <h4>Mix con IA</h4>
+                                <p><code>/mix ia "jazz suave para pair programming nocturno"</code> — La IA genera 10 canciones con botones: ▶️ Reproducir | 💾 Guardar | 🔄 Regenerar.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- GESTIÓN SECTION -->
+    <section class="detail-section" id="gestion">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag tag-task">Gestión de Proyectos</span>
+                <h2 class="section-title">Tu oficina virtual,<br><span class="gradient-text">dentro de Discord</span></h2>
+            </div>
+
+            <div class="management-grid">
+                <!-- Kanban -->
+                <div class="mgmt-card kanban-card">
+                    <h3>📋 Tablero Kanban</h3>
+                    <div class="kanban-board">
+                        <div class="kanban-col">
+                            <div class="kanban-header kh-pending">🔸 Pendiente</div>
+                            <div class="kanban-item">Diseñar login</div>
+                            <div class="kanban-item">API de pagos</div>
+                        </div>
+                        <div class="kanban-col">
+                            <div class="kanban-header kh-progress">🔵 En progreso</div>
+                            <div class="kanban-item highlight">Dashboard admin</div>
+                        </div>
+                        <div class="kanban-col">
+                            <div class="kanban-header kh-review">🟡 Revisión</div>
+                            <div class="kanban-item">CRUD usuarios</div>
+                        </div>
+                        <div class="kanban-col">
+                            <div class="kanban-header kh-done">✅ Completada</div>
+                            <div class="kanban-item done">Setup de BD</div>
+                            <div class="kanban-item done">Auth module</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Standup -->
+                <div class="mgmt-card standup-card">
+                    <h3>🌅 Standup Diario</h3>
+                    <div class="standup-preview">
+                        <div class="standup-field">
+                            <label>📌 ¿Qué hiciste ayer?</label>
+                            <div class="standup-input">Completé el módulo de autenticación y los tests unitarios.</div>
+                        </div>
+                        <div class="standup-field">
+                            <label>🎯 ¿Qué harás hoy?</label>
+                            <div class="standup-input">Empezar el dashboard de administrador y conectar la API.</div>
+                        </div>
+                        <div class="standup-field">
+                            <label>🚧 ¿Bloqueos?</label>
+                            <div class="standup-input">Necesito las credenciales del servidor de staging.</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Reporte -->
+                <div class="mgmt-card report-card">
+                    <h3>📊 Reporte Semanal</h3>
+                    <div class="report-preview">
+                        <div class="report-stat">
+                            <span class="rs-number">12</span>
+                            <span class="rs-label">✅ Completadas</span>
+                        </div>
+                        <div class="report-stat">
+                            <span class="rs-number">5</span>
+                            <span class="rs-label">🔸 Pendientes</span>
+                        </div>
+                        <div class="report-stat">
+                            <span class="rs-number">1</span>
+                            <span class="rs-label">🔴 Críticas</span>
+                        </div>
+                        <div class="report-mvp">
+                            <span>🏆</span>
+                            <div>
+                                <strong>MVP de la semana</strong>
+                                <p>Carlos — 5 tareas completadas</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Roles -->
+                <div class="mgmt-card roles-card">
+                    <h3>🏢 Roles del Equipo</h3>
+                    <div class="roles-preview">
+                        <div class="role-chip" style="--c: #61DAFB">🎨 Frontend Dev</div>
+                        <div class="role-chip" style="--c: #68A063">⚙️ Backend Dev</div>
+                        <div class="role-chip" style="--c: #3DDC84">📱 Mobile Dev</div>
+                        <div class="role-chip" style="--c: #F5A623">🎯 Project Manager</div>
+                        <div class="role-chip" style="--c: #9B59B6">🧪 QA / Tester</div>
+                        <div class="role-chip" style="--c: #E91E63">🎨 UI/UX Designer</div>
+                        <div class="role-chip" style="--c: #95A5A6">📚 Pasante</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- COMANDOS SECTION -->
+    <section class="commands-section section-dark" id="comandos">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Referencia</span>
+                <h2 class="section-title">Todos los <span class="gradient-text">comandos</span></h2>
+                <p class="section-subtitle">30+ comandos organizados por módulo. Click en cada sección para expandir.</p>
+            </div>
+
+            <div class="commands-grid">
+                <!-- IA -->
+                <div class="cmd-group" data-open="true">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>🤖 Inteligencia Artificial</span>
+                        <span class="cmd-count">7</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/pregunta &lt;texto&gt;</code><span>Pregunta a la IA</span></div>
+                        <div class="cmd-item"><code>/iaver [pregunta]</code><span>Analiza imagen adjunta</span></div>
+                        <div class="cmd-item"><code>/ialeer [pregunta]</code><span>Lee archivo de código adjunto</span></div>
+                        <div class="cmd-item"><code>/iachat</code><span>Hilo con contexto (10 msgs)</span></div>
+                        <div class="cmd-item"><code>/iareview &lt;código&gt;</code><span>Code review con puntuación</span></div>
+                        <div class="cmd-item"><code>/iadocs &lt;código&gt;</code><span>Genera documentación</span></div>
+                        <div class="cmd-item"><code>/iastats</code><span>Dashboard de uso diario</span></div>
+                    </div>
+                </div>
+
+                <!-- Música -->
+                <div class="cmd-group">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>🎵 Música y Mixes</span>
+                        <span class="cmd-count">13</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/play &lt;búsqueda&gt;</code><span>Reproduce o encola canción</span></div>
+                        <div class="cmd-item"><code>/cola</code><span>Ver cola de reproducción</span></div>
+                        <div class="cmd-item"><code>/skip</code><span>Saltar canción</span></div>
+                        <div class="cmd-item"><code>/pause</code><span>Pausar</span></div>
+                        <div class="cmd-item"><code>/resume</code><span>Reanudar</span></div>
+                        <div class="cmd-item"><code>/np</code><span>Canción actual</span></div>
+                        <div class="cmd-item"><code>/stop</code><span>Detener y desconectar</span></div>
+                        <div class="cmd-item"><code>/mix crear &lt;nombre&gt;</code><span>Crear mix vacío</span></div>
+                        <div class="cmd-item"><code>/mix agregar &lt;mix&gt; &lt;canción&gt;</code><span>Agregar canción a mix</span></div>
+                        <div class="cmd-item"><code>/mix reproducir &lt;nombre&gt;</code><span>Reproducir mix completo</span></div>
+                        <div class="cmd-item"><code>/mix listar</code><span>Ver tus mixes</span></div>
+                        <div class="cmd-item"><code>/mix eliminar &lt;nombre&gt;</code><span>Eliminar mix</span></div>
+                        <div class="cmd-item"><code>/mix ia &lt;descripción&gt;</code><span>Mix generado por IA 🤖</span></div>
+                    </div>
+                </div>
+
+                <!-- Roles -->
+                <div class="cmd-group">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>🏢 Roles del Equipo</span>
+                        <span class="cmd-count">4</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/rolmenu</code><span>Menú interactivo de roles</span></div>
+                        <div class="cmd-item"><code>/equipo</code><span>Ver distribución del equipo</span></div>
+                        <div class="cmd-item"><code>/rolasignar @user &lt;rol&gt;</code><span>Asignar rol (Admin)</span></div>
+                        <div class="cmd-item"><code>/rolquitar @user &lt;rol&gt;</code><span>Quitar rol (Admin)</span></div>
+                    </div>
+                </div>
+
+                <!-- Tareas -->
+                <div class="cmd-group">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>📋 Tareas / Tickets</span>
+                        <span class="cmd-count">5</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/tarea &lt;título&gt; [@user] [prioridad]</code><span>Crear tarea</span></div>
+                        <div class="cmd-item"><code>/tareas [filtro]</code><span>Listar tareas (pendientes, mias, urgentes...)</span></div>
+                        <div class="cmd-item"><code>/mistareas</code><span>Tus tareas asignadas</span></div>
+                        <div class="cmd-item"><code>/tareaestado &lt;ID&gt; &lt;estado&gt;</code><span>Cambiar estado</span></div>
+                        <div class="cmd-item"><code>/tablero</code><span>Vista Kanban</span></div>
+                    </div>
+                </div>
+
+                <!-- Standup -->
+                <div class="cmd-group">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>🌅 Standups</span>
+                        <span class="cmd-count">3</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/standup</code><span>Reportar standup (modal)</span></div>
+                        <div class="cmd-item"><code>/standups</code><span>Ver standups de hoy</span></div>
+                        <div class="cmd-item"><code>/standupresumen</code><span>Resumen semanal</span></div>
+                    </div>
+                </div>
+
+                <!-- Recordatorios -->
+                <div class="cmd-group">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>⏰ Recordatorios</span>
+                        <span class="cmd-count">3</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/recordar &lt;tiempo&gt; &lt;mensaje&gt;</code><span>Recordatorio personal</span></div>
+                        <div class="cmd-item"><code>/deadline &lt;fecha&gt; &lt;nombre&gt;</code><span>Deadline de proyecto</span></div>
+                        <div class="cmd-item"><code>/deadlines</code><span>Ver deadlines activos</span></div>
+                    </div>
+                </div>
+
+                <!-- Reportes + Monitor -->
+                <div class="cmd-group">
+                    <button class="cmd-header" onclick="toggleGroup(this)">
+                        <span>📊 Reportes y Monitor</span>
+                        <span class="cmd-count">2</span>
+                    </button>
+                    <div class="cmd-body">
+                        <div class="cmd-item"><code>/reporte</code><span>Reporte semanal (PM/Admin)</span></div>
+                        <div class="cmd-item"><code>/status</code><span>Estado del sistema</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- TEAM SECTION -->
+    <section class="team-section" id="equipo">
+        <div class="container">
+            <div class="section-header">
+                <span class="section-tag">Stack</span>
+                <h2 class="section-title">Construido con <span class="gradient-text">tecnología moderna</span></h2>
+            </div>
+            <div class="tech-grid">
+                <div class="tech-card">
+                    <div class="tech-icon">🐍</div>
+                    <h4>Python 3.11+</h4>
+                    <p>Runtime principal</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🤖</div>
+                    <h4>discord.py 2.4</h4>
+                    <p>Framework del bot</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🧠</div>
+                    <h4>Qwen AI</h4>
+                    <p>Texto + Visión</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🗄️</div>
+                    <h4>SQLite + aiosqlite</h4>
+                    <p>Base de datos async</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🎬</div>
+                    <h4>yt-dlp + FFmpeg</h4>
+                    <p>Audio streaming</p>
+                </div>
+                <div class="tech-card">
+                    <div class="tech-icon">🔒</div>
+                    <h4>PyNaCl</h4>
+                    <p>Cifrado de voz</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-brand">
+                    <span class="logo-icon">🤖</span>
+                    <span class="logo-text">YoRobot</span>
+                    <span class="logo-badge">v2.0</span>
+                </div>
+                <p class="footer-text">Hecho con ❤️ para equipos de desarrollo que viven en Discord.</p>
+                <p class="footer-copy">&copy; 2026 YoRobot Dev Team. Todos los derechos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>
