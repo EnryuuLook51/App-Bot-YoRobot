@@ -1,0 +1,13 @@
+services:
+  yorobot:
+    build: .
+    restart: unless-stopped
+    env_file:
+      - .env
+    volumes:
+      - ./bot_database.db:/app/bot_database.db
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

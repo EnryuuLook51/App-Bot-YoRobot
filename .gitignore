@@ -1,6 +1,4 @@
 # Docker
-Dockerfile
-docker-compose.yml
 .dockerignore
 
 # Environment
