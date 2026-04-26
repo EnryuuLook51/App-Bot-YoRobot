@@ -5,7 +5,8 @@ services:
     env_file:
       - .env
     volumes:
-      - ./bot_database.db:/app/bot_database.db
+      - ./bot_database.db:/app/bot_database.db:rw
+    user: "1000:1000"
     logging:
       driver: "json-file"
       options:
