@@ -6,6 +6,10 @@
 .env.local
 .env.production
 
+# Cookies (secretos)
+youtube_cookies.txt
+www.youtube.com_cookies.txt
+
 # Python
 __pycache__/
 *.py[cod]

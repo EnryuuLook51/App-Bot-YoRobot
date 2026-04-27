@@ -6,6 +6,7 @@ services:
       - .env
     volumes:
       - ./bot_database.db:/app/bot_database.db:rw
+      - ./youtube_cookies.txt:/app/youtube_cookies.txt:ro
     logging:
       driver: "json-file"
       options:

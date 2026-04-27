@@ -29,6 +29,7 @@ YDL_OPTIONS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     "socket_timeout": 10,
+    "cookiefile": "youtube_cookies.txt",
 }
 
 FFMPEG_OPTIONS = {
