@@ -34,7 +34,6 @@ Cuando respondas sobre código, usa bloques de código con el lenguaje apropiado
 """
 
 # ─── Límites de uso de IA (por usuario por día) ─────────────
-IA_LIMIT_TEXT = 50          # Consultas de texto
 IA_LIMIT_IMAGE = 10         # Análisis de imágenes
 IA_LIMIT_FILE = 20          # Análisis de archivos
 IA_LIMIT_MIX = 100          # Generaciones de mix por IA (Aumentado para pruebas)
@@ -43,7 +42,6 @@ IA_WARNING_THRESHOLD = 2    # Avisar cuando quedan N usos
 # ─── Música ──────────────────────────────────────────────────
 MAX_SONGS_PER_MIX = 30
 MAX_MIXES_PER_USER = 10
-MIX_IA_SONGS_COUNT = 10     # Canciones a generar por mix IA
 YOUTUBE_TIMEOUT = 20         # Segundos de timeout para yt-dlp
 
 # ─── Tareas ──────────────────────────────────────────────────
@@ -52,11 +50,6 @@ TASK_PRIORITIES = ["baja", "media", "alta", "crítica"]
 
 # ─── Base de Datos ───────────────────────────────────────────
 DB_PATH = "bot_database.db"
-
-# ─── Timezone ────────────────────────────────────────────────
-DEFAULT_TIMEZONE = "America/Lima"
-STANDUP_TIME = "09:00"
-REPORT_DAY = "friday"
 
 # ─── Roles del equipo ───────────────────────────────────────
 TEAM_ROLES = {

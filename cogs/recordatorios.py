@@ -61,7 +61,7 @@ class Recordatorios(commands.Cog):
 
         await self.bot.db.crear_deadline(ctx.guild.id, nombre, deadline_date.isoformat(), ctx.author.id)
         embed = success_embed("Deadline creado",
-            f"📌 **{nombre}**\n📅 Fecha: **{fecha}**\n⏰ Se notificará 24h y 1h antes.")
+            f"📌 **{nombre}**\n📅 Fecha: **{fecha}**")
         set_author(embed, ctx)
         await ctx.send(embed=embed)
 

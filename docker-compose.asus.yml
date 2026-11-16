@@ -1,0 +1,17 @@
+services:
+  yorobot:
+    build: .
+    restart: unless-stopped
+    init: true
+    user: "1000:1000"
+    working_dir: /data
+    command: ["python", "/app/main.py"]
+    env_file:
+      - .env
+    volumes:
+      - /opt/apps/data/yorobot:/data
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"

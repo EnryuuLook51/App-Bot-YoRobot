@@ -4,10 +4,9 @@ RF-RP-01 a RF-RP-02
 """
 import discord
 from discord.ext import commands, tasks
-from discord import app_commands
 import logging
 from datetime import datetime
-from utils.embeds import info_embed, set_author
+from utils.embeds import set_author
 from utils.checks import es_pm
 from utils.constants import Colors
 

@@ -94,25 +94,6 @@ def standup_embed(title: str, description: str = "") -> discord.Embed:
     return embed
 
 
-def paginated_embed(title: str, items: list, per_page: int = 10, page: int = 1) -> discord.Embed:
-    """Embed paginado para listas largas."""
-    total_pages = max(1, (len(items) + per_page - 1) // per_page)
-    page = max(1, min(page, total_pages))
-
-    start = (page - 1) * per_page
-    end = start + per_page
-    page_items = items[start:end]
-
-    embed = discord.Embed(
-        title=title,
-        description="\n".join(page_items) if page_items else "No hay elementos.",
-        color=Colors.BRAND,
-        timestamp=datetime.utcnow()
-    )
-    embed.set_footer(text=f"Página {page}/{total_pages}")
-    return embed
-
-
 def set_author(embed: discord.Embed, ctx) -> discord.Embed:
     """Agrega info del autor al embed."""
     avatar = ctx.author.avatar.url if ctx.author.avatar else None

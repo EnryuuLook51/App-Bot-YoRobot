@@ -101,12 +101,10 @@ class Tareas(commands.Cog):
     async def tablero(self, ctx):
         embed = discord.Embed(title="📋 Tablero Kanban", color=Colors.TASK, timestamp=discord.utils.utcnow())
         for estado in TASK_STATES:
-            tareas = await self.bot.db.obtener_tareas(ctx.guild.id, filtro=estado if estado != "en-progreso" else "en-progreso")
-            # Filtro manual para estados exactos
-            tareas_estado = [t for t in (await self.bot.db.fetchall(
-                "SELECT * FROM tareas WHERE guild_id = ? AND estado = ? AND estado != 'completada' ORDER BY id DESC LIMIT 5",
+            tareas_estado = await self.bot.db.fetchall(
+                "SELECT * FROM tareas WHERE guild_id = ? AND estado = ? ORDER BY id DESC LIMIT 5",
                 (ctx.guild.id, estado)
-            ))]
+            )
             emoji = TASK_STATE_EMOJIS.get(estado, "🔸")
             if tareas_estado:
                 val = "\n".join(f"`#{t['id']}` {t['titulo']}" for t in tareas_estado)

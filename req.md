@@ -265,7 +265,7 @@ entretenimiento para el equipo. El bot debe ser modular, escalable y profesional
 
 #### RF-RE-02: Deadline de proyecto
 - **Comando:** `/deadline <nombre> <fecha>`
-- **Descripción:** Deadline visible para todo el equipo. Notifica 24h y 1h antes.
+- **Descripción:** Deadline visible para todo el equipo.
 - **Prioridad:** 🟡 Media
 
 ---
@@ -423,9 +423,7 @@ CREATE TABLE deadlines (
     guild_id INTEGER NOT NULL,
     nombre TEXT NOT NULL,
     fecha TIMESTAMP NOT NULL,
-    creado_por INTEGER NOT NULL,
-    notificado_24h BOOLEAN DEFAULT FALSE,
-    notificado_1h BOOLEAN DEFAULT FALSE
+    creado_por INTEGER NOT NULL
 );
 
 -- Control de uso de IA

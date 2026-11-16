@@ -38,8 +38,19 @@
 | `/resume`          | Reanuda la reproducción pausada                       | `/resume`                  |
 | `/np`              | Muestra la canción que se está reproduciendo ahora    | `/np`                      |
 | `/stop`            | Detiene la música, limpia la cola y desconecta al bot | `/stop`                    |
+| `/historial [pagina]` | Últimas canciones iniciadas en este servidor, 10 por página | `/historial pagina:2` |
+
+El historial persiste tras reiniciar el bot y registra título, URL pública,
+duración, solicitante y fecha UTC al iniciar una reproducción (no al encolarla).
+Incluye canciones de `/play` y de mixes; no reconstruye reproducciones anteriores
+a su activación ni certifica que una canción se haya escuchado completa.
 
 ### Mixes (Playlists)
+
+`/mix aleatorio nombre:Recuerdos` crea y guarda una playlist de 10 canciones
+distintas elegidas al azar del historial completo del servidor. Cada canción tiene
+la misma probabilidad aunque se haya reproducido muchas veces. Si hay menos de
+10, usa las disponibles sin repetir. Reprodúcela con `/mix reproducir nombre:Recuerdos`.
 
 | Comando                           | Descripción                                                | Ejemplo                                                 |
 | --------------------------------- | ---------------------------------------------------------- | ------------------------------------------------------- |

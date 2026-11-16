@@ -1,0 +1,12 @@
+.git
+.env
+.env.*
+venv
+.venv
+**/__pycache__
+*.db
+*.db-*
+*.sqlite3
+*.log
+*cookies*.txt
+tests

@@ -7,7 +7,6 @@ import discord
 from discord.ext import commands
 from discord import app_commands
 import os
-import json
 import asyncio
 import logging
 from openai import OpenAI
@@ -18,7 +17,6 @@ from config import (
     IA_WARNING_THRESHOLD, ALLOWED_FILE_EXTENSIONS, MAX_FILE_SIZE_KB
 )
 from utils.embeds import ai_embed, error_embed, warning_embed, set_author
-from utils.constants import Colors
 
 logger = logging.getLogger("cog.ia")
 

@@ -9,15 +9,17 @@ import yt_dlp
 import asyncio
 import json
 import logging
+import os
+import sqlite3
+from datetime import datetime, timezone
 from openai import OpenAI
 
 from config import (
-    API_QWEN, QWEN_BASE_URL, QWEN_MODEL_TEXT, SYSTEM_PROMPT,
-    MAX_SONGS_PER_MIX, MAX_MIXES_PER_USER, MIX_IA_SONGS_COUNT,
+    API_QWEN, QWEN_BASE_URL, QWEN_MODEL_TEXT,
+    MAX_SONGS_PER_MIX, MAX_MIXES_PER_USER,
     YOUTUBE_TIMEOUT, IA_LIMIT_MIX
 )
 from utils.embeds import music_embed, error_embed, success_embed, warning_embed, set_author
-from utils.constants import Colors
 
 logger = logging.getLogger("cog.music")
 
@@ -29,8 +31,12 @@ YDL_OPTIONS = {
     "default_search": "auto",
     "source_address": "0.0.0.0",
     "socket_timeout": 10,
-    "cookiefile": "youtube_cookies.txt",
 }
+
+# Las canciones públicas no necesitan una sesión de YouTube. Las cookies
+# pueden forzar un cliente cuyo stream sea rechazado con HTTP 403.
+if os.getenv("YOUTUBE_COOKIE_FILE"):
+    YDL_OPTIONS["cookiefile"] = os.environ["YOUTUBE_COOKIE_FILE"]
 
 FFMPEG_OPTIONS = {
     "before_options": "-reconnect 1 -reconnect_streamed 1 -reconnect_delay_max 5",
@@ -72,7 +78,8 @@ class MixIAView(ui.View):
 
         for song in self.songs:
             query = f"{song['artista']} - {song['titulo']}"
-            self.cog.queue.append({"query": query, "title": query, "requested_by": interaction.user.display_name})
+            self.cog.queue.append({"query": query, "title": query, "requested_by": interaction.user.display_name,
+                                   "requested_by_id": interaction.user.id})
 
         await interaction.followup.send(f"🎵 Mix encolado: **{len(self.songs)} canciones**. ¡Reproduciendo!")
 
@@ -164,6 +171,7 @@ class Music(commands.Cog):
                     "title": entry.get("title", query),
                     "duration": entry.get("duration", 0),
                     "thumbnail": entry.get("thumbnail"),
+                    "webpage_url": entry.get("webpage_url"),
                 }
         except asyncio.TimeoutError:
             logger.warning(f"Timeout buscando: {query}")
@@ -218,13 +226,31 @@ class Music(commands.Cog):
 
         try:
             source = await discord.FFmpegOpusAudio.from_probe(result["url"], **FFMPEG_OPTIONS)
+            loop = asyncio.get_running_loop()
+
+            def playback_done(future):
+                try:
+                    future.result()
+                except Exception:
+                    logger.exception("Error avanzando la cola de reproducción")
 
             def after_play(error):
                 if error:
                     logger.error(f"Error reproducción: {error}")
-                asyncio.run_coroutine_threadsafe(self._play_next(ctx), self.bot.loop)
+                future = asyncio.run_coroutine_threadsafe(self._play_next(ctx), loop)
+                future.add_done_callback(playback_done)
 
             self.voice_client.play(source, after=after_play)
+
+            # Un fallo al persistir no debe interrumpir el audio ni saltar de pista.
+            try:
+                await self.bot.db.registrar_reproduccion(
+                    ctx.guild.id, song.get("requested_by_id"),
+                    song.get("requested_by", "?"), result["title"],
+                    result.get("webpage_url"), result.get("duration")
+                )
+            except Exception:
+                logger.exception("No se pudo guardar la reproducción en el historial")
 
             embed = music_embed("Reproduciendo ahora", f"**{result['title']}**")
             if result.get("duration"):
@@ -261,6 +287,7 @@ class Music(commands.Cog):
                 "query": busqueda,
                 "title": busqueda,
                 "requested_by": ctx.author.display_name,
+                "requested_by_id": ctx.author.id,
             })
             embed = music_embed("Agregado a la cola", f"**{busqueda}**\nPosición: `#{len(self.queue)}`")
             set_author(embed, ctx)
@@ -271,6 +298,7 @@ class Music(commands.Cog):
             "query": busqueda,
             "title": busqueda,
             "requested_by": ctx.author.display_name,
+            "requested_by_id": ctx.author.id,
         })
         await self._play_next(ctx)
 
@@ -295,6 +323,32 @@ class Music(commands.Cog):
 
         embed = music_embed("Cola de reproducción", "\n".join(lines))
         embed.set_footer(text=f"{len(self.queue)} canciones en cola")
+        await ctx.send(embed=embed)
+
+    @commands.hybrid_command(name="historial", description="Ver las últimas canciones reproducidas en este servidor")
+    @commands.guild_only()
+    @app_commands.describe(pagina="Página del historial (10 canciones por página)")
+    async def historial(self, ctx, pagina: int = 1):
+        if pagina < 1 or pagina > 1000000:
+            return await ctx.send("❌ Usa una página entre 1 y 1000000.")
+        await ctx.defer()
+        rows = await self.bot.db.obtener_historial_musica(ctx.guild.id, pagina)
+        if not rows:
+            return await ctx.send(embed=music_embed(
+                "Sin historial", "No hay reproducciones en esta página. El historial se guarda desde su activación."
+            ))
+
+        lines = []
+        for i, row in enumerate(rows[:10], start=(pagina - 1) * 10 + 1):
+            title = discord.utils.escape_markdown(row["titulo"][:150])
+            name = discord.utils.escape_markdown(row["solicitado_por"][:80])
+            timestamp = int(datetime.fromisoformat(row["fecha"]).replace(tzinfo=timezone.utc).timestamp())
+            lines.append(f"**{i}. {title}**\nPedido por {name} · <t:{timestamp}:f>")
+        embed = music_embed("Historial de música", "\n\n".join(lines))
+        footer = f"Página {pagina} · Más recientes primero"
+        if len(rows) > 10:
+            footer += f" · Siguiente: /historial pagina:{pagina + 1}"
+        embed.set_footer(text=footer)
         await ctx.send(embed=embed)
 
     @commands.hybrid_command(name="skip", description="Salta a la siguiente canción")
@@ -356,6 +410,7 @@ class Music(commands.Cog):
             "**`/mix reproducir <nombre>`** — Reproducir mix\n"
             "**`/mix listar`** — Ver tus mixes\n"
             "**`/mix eliminar <nombre>`** — Eliminar un mix\n"
+            "**`/mix aleatorio <nombre>`** — Guardar 10 canciones al azar del historial\n"
             "**`/mix ia <descripción>`** — Generar mix con IA 🤖"
         )
         await ctx.send(embed=embed)
@@ -368,12 +423,39 @@ class Music(commands.Cog):
             return await ctx.send(embed=error_embed("Límite de mixes", f"Ya tienes {MAX_MIXES_PER_USER} mixes. Elimina uno primero."))
 
         try:
-            mix_id = await self.bot.db.crear_mix(ctx.guild.id, ctx.author.id, nombre)
+            await self.bot.db.crear_mix(ctx.guild.id, ctx.author.id, nombre)
             embed = success_embed("Mix creado", f"Mix **{nombre}** creado. Usa `/mix agregar {nombre} <canción>` para agregar canciones.")
             set_author(embed, ctx)
             await ctx.send(embed=embed)
         except Exception:
             await ctx.send(embed=error_embed("Mix duplicado", f"Ya tienes un mix llamado **{nombre}**."))
+
+    @mix_group.command(name="aleatorio", description="Crea una playlist de 10 canciones al azar del historial del servidor")
+    @commands.guild_only()
+    @app_commands.describe(nombre="Nombre para guardar la playlist aleatoria")
+    async def mix_aleatorio(self, ctx, *, nombre: str):
+        nombre = nombre.strip()
+        if not nombre or len(nombre) > 50:
+            return await ctx.send(embed=error_embed("Nombre inválido", "Usa un nombre de 1 a 50 caracteres."))
+        await ctx.defer()
+        try:
+            songs = await self.bot.db.crear_mix_aleatorio(
+                ctx.guild.id, ctx.author.id, nombre, MAX_MIXES_PER_USER
+            )
+        except ValueError:
+            return await ctx.send(embed=error_embed("Límite de mixes", f"Ya tienes {MAX_MIXES_PER_USER} mixes. Elimina uno primero."))
+        except sqlite3.IntegrityError:
+            return await ctx.send(embed=error_embed("Mix duplicado", "Ya tienes un mix con ese nombre. Elige otro."))
+        if not songs:
+            return await ctx.send(embed=music_embed("Sin historial", "Primero reproduce canciones con `/play` para crear un historial."))
+
+        lines = [f"`{i}.` {discord.utils.escape_markdown(song['titulo'][:150])}"
+                 for i, song in enumerate(songs, start=1)]
+        description = f"**{discord.utils.escape_markdown(nombre)}** — {len(songs)} canciones sin repetir.\n\n" + "\n".join(lines)
+        if len(songs) < 10:
+            description += "\n\nTodavía hay menos de 10 canciones distintas en el historial; usé todas las disponibles."
+        description += f"\n\n▶️ Reproduce con `/mix reproducir nombre:{nombre}`."
+        await ctx.send(embed=music_embed("Playlist aleatoria guardada", description))
 
     @mix_group.command(name="agregar", description="Agrega una canción a un mix")
     @app_commands.describe(nombre="Nombre del mix", cancion="Nombre de la canción a agregar")
@@ -424,7 +506,8 @@ class Music(commands.Cog):
 
         for c in canciones:
             query = f"{c['artista']} - {c['titulo']}" if c["artista"] else c["titulo"]
-            self.queue.append({"query": query, "title": query, "requested_by": ctx.author.display_name})
+            self.queue.append({"query": query, "title": query, "requested_by": ctx.author.display_name,
+                               "requested_by_id": ctx.author.id})
 
         embed = music_embed("Mix encolado", f"**{nombre}** — `{len(canciones)}` canciones agregadas a la cola.")
         set_author(embed, ctx)

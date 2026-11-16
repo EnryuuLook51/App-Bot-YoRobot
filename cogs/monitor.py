@@ -8,7 +8,7 @@ import psutil
 import time
 import logging
 from datetime import datetime
-from utils.embeds import info_embed, set_author
+from utils.embeds import set_author
 from utils.constants import Colors
 
 logger = logging.getLogger("cog.monitor")

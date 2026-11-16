@@ -4,11 +4,10 @@ RF-ST-01 a RF-ST-03
 """
 import discord
 from discord.ext import commands, tasks
-from discord import app_commands, ui
+from discord import ui
 import logging
 from datetime import datetime
-from utils.embeds import standup_embed, success_embed, set_author
-from utils.constants import Colors
+from utils.embeds import standup_embed, set_author
 
 logger = logging.getLogger("cog.standup")
 

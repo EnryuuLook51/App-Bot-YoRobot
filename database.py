@@ -77,6 +77,20 @@ class Database:
                     FOREIGN KEY (mix_id) REFERENCES mixes(id) ON DELETE CASCADE
                 );
 
+                -- Historial de reproducciones (independiente de los mixes)
+                CREATE TABLE IF NOT EXISTS musica_historial (
+                    id INTEGER PRIMARY KEY AUTOINCREMENT,
+                    guild_id INTEGER NOT NULL,
+                    user_id INTEGER,
+                    solicitado_por TEXT NOT NULL,
+                    titulo TEXT NOT NULL,
+                    url TEXT,
+                    duracion INTEGER,
+                    fecha TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+                );
+                CREATE INDEX IF NOT EXISTS idx_musica_historial_guild
+                    ON musica_historial (guild_id, id DESC);
+
                 -- Recordatorios
                 CREATE TABLE IF NOT EXISTS recordatorios (
                     id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -94,9 +108,7 @@ class Database:
                     guild_id INTEGER NOT NULL,
                     nombre TEXT NOT NULL,
                     fecha TIMESTAMP NOT NULL,
-                    creado_por INTEGER NOT NULL,
-                    notificado_24h BOOLEAN DEFAULT 0,
-                    notificado_1h BOOLEAN DEFAULT 0
+                    creado_por INTEGER NOT NULL
                 );
 
                 -- Control de uso de IA
@@ -259,6 +271,63 @@ class Database:
             (guild_id, user_id)
         )
         return row["count"] if row else 0
+
+    # ─── Historial musical ───────────────────────────────────
+
+    async def registrar_reproduccion(self, guild_id, user_id, solicitado_por,
+                                     titulo, url=None, duracion=None):
+        """Guarda el inicio de una reproducción, no solo su encolado."""
+        return await self.execute(
+            """INSERT INTO musica_historial
+               (guild_id, user_id, solicitado_por, titulo, url, duracion)
+               VALUES (?, ?, ?, ?, ?, ?)""",
+            (guild_id, user_id, solicitado_por, titulo, url, duracion)
+        )
+
+    async def obtener_historial_musica(self, guild_id, pagina=1):
+        """Diez entradas por página y una extra para detectar la siguiente."""
+        if pagina < 1:
+            raise ValueError("La página debe ser mayor o igual a 1")
+        return await self.fetchall(
+            """SELECT * FROM musica_historial WHERE guild_id = ?
+               ORDER BY id DESC LIMIT 11 OFFSET ?""",
+            (guild_id, (pagina - 1) * 10)
+        )
+
+    async def crear_mix_aleatorio(self, guild_id, user_id, nombre, max_mixes):
+        """Muestreo uniforme de hasta 10 canciones distintas y guardado atómico."""
+        async with aiosqlite.connect(self.db_path) as db:
+            db.row_factory = aiosqlite.Row
+            await db.execute("BEGIN IMMEDIATE")
+            cursor = await db.execute(
+                "SELECT COUNT(*) FROM mixes WHERE guild_id = ? AND user_id = ?",
+                (guild_id, user_id)
+            )
+            if (await cursor.fetchone())[0] >= max_mixes:
+                raise ValueError("Límite de mixes alcanzado")
+
+            # Agrupar antes de sortear evita favorecer canciones muy repetidas.
+            cursor = await db.execute(
+                """SELECT titulo FROM musica_historial WHERE id IN (
+                       SELECT MAX(id) FROM musica_historial WHERE guild_id = ?
+                       GROUP BY COALESCE(NULLIF(url, ''), LOWER(TRIM(titulo)))
+                   ) ORDER BY RANDOM() LIMIT 10""",
+                (guild_id,)
+            )
+            songs = await cursor.fetchall()
+            if not songs:
+                return []
+            cursor = await db.execute(
+                "INSERT INTO mixes (guild_id, user_id, nombre) VALUES (?, ?, ?)",
+                (guild_id, user_id, nombre)
+            )
+            mix_id = cursor.lastrowid
+            await db.executemany(
+                "INSERT INTO mix_canciones (mix_id, titulo, posicion) VALUES (?, ?, ?)",
+                [(mix_id, song["titulo"], i) for i, song in enumerate(songs, start=1)]
+            )
+            await db.commit()
+            return songs
 
     # ─── Recordatorios ───────────────────────────────────────
 

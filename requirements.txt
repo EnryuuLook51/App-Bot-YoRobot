@@ -31,4 +31,4 @@ tqdm==4.67.3
 typing-extensions==4.15.0
 typing-inspection==0.4.2
 yarl==1.23.0
-yt-dlp==2026.3.17
+yt-dlp[default,deno]==2026.8.19

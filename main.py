@@ -124,7 +124,7 @@ async def on_command_error(ctx, error):
         await ctx.send(f"❌ Argumento inválido: {error}")
     else:
         logger.error(f"Error no manejado: {error}", exc_info=True)
-        await ctx.send(f"❌ Ocurrió un error inesperado. Revisa los logs.")
+        await ctx.send("❌ Ocurrió un error inesperado. Revisa los logs.")
 
 
 # ─── Ejecutar ────────────────────────────────────────────────
